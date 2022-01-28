@@ -1,6 +1,5 @@
 // Require the necessary discord.js classes
 const { Client, Intents, MessageEmbed, Collection } = require("discord.js");
-const { SlashCommandBuilder } = require("@discordjs/builders");
 const { token } = require("./config.json");
 
 // Create a new client instance
@@ -11,38 +10,39 @@ client.commands = new Collection();
 
 // When the client is ready, run this code (only once)
 client.once("ready", () => {
-    console.log("Consider Thyself Ready!");
+  console.log("Consider Thyself Ready!");
 });
 
 // Get all commands and store them
-const commandFiles = fs
-    .readdirSync("./commands/")
-    .filter((file) => file.endsWith(".js"));
+const commandFiles = fs.readdirSync("./commands/").filter((file) => file.endsWith(".js"));
 
 for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
-    client.commands.set(command.data.name, command);
+  const command = require(`./commands/${file}`);
+  client.commands.set(command.data.name, command);
 }
 
 client.on("interactionCreate", async (interaction) => {
-    if (!interaction.isCommand()) return;
+  if (!interaction.isCommand()) return;
 
-    const command = client.commands.get(interaction.commandName);
+  const command = client.commands.get(interaction.commandName);
+  const guild = interaction.member.guild;
 
-    if (!command) return;
+  if (!command) return;
 
-    try {
-        await command.execute(interaction, {
-            client: client,
-        });
-    } catch (error) {
-        console.log("u suck");
-        console.error(error);
-        await interaction.reply({
-            content: "There was an error while executing this command!",
-            ephemeral: true,
-        });
-    }
+  try {
+    await command.execute(interaction, {
+      client: client,
+      guild: guild,
+      roleColor: "#6343ba",
+    });
+  } catch (error) {
+    console.log("u suck");
+    console.error(error);
+    await interaction.reply({
+      content: "There was an error while executing this command!",
+      ephemeral: true,
+    });
+  }
 });
 
 // Login to Discord with your client's token
