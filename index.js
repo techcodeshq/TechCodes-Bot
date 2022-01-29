@@ -36,6 +36,8 @@ client.on("interactionCreate", async (interaction) => {
       guild: guild,
       roleColor: roleColor,
       roleColorDec: parseInt(roleColor.slice(1), 16),
+      categoryName: "Teams",
+      maxMembers: 4,
     });
   } catch (error) {
     console.log("u suck");

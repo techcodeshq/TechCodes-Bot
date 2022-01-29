@@ -3,8 +3,8 @@ const { MessageActionRow, MessageButton, Permissions } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("delete_group")
-    .setDescription("Delete an existing Hackathon Group!")
+    .setName("delete_team")
+    .setDescription("Delete an existing hackathon team!")
     .addRoleOption((option) =>
       option.setName("team").setDescription("The role of the team to delete").setRequired(true)
     ),

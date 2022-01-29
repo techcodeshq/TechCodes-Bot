@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageActionRow, MessageButton } = require("discord.js");
-const { deleteBoth } = require("./delete_group");
+const { deleteBoth } = require("./delete_team");
 
 const basicPerms = (role, deny = false) => {
   const obj = {
@@ -12,15 +12,13 @@ const basicPerms = (role, deny = false) => {
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("create_group")
-    .setDescription("Create a Hackathon Group!")
-    .addStringOption((option) =>
-      option.setName("name").setDescription("The name of your new group!").setRequired(true)
-    ),
+    .setName("create_team")
+    .setDescription("Create a hackathon team!")
+    .addStringOption((option) => option.setName("name").setDescription("The name of your new team!").setRequired(true)),
   async execute(interaction, props) {
-    const groupName = await interaction.options.getString("name");
+    const teamName = await interaction.options.getString("name");
     const denyEveryone = basicPerms(props.guild.roles.everyone, true);
-    const alreadyExists = await props.guild.roles.cache.find((r) => r.name === groupName);
+    const alreadyExists = await props.guild.roles.cache.find((r) => r.name === teamName);
 
     //Make sure team doesnt already exist
     if (alreadyExists) {
@@ -32,11 +30,13 @@ module.exports = {
 
     const success = async () => {
       // Make sure the category exists
-      let category = await props.guild.channels.cache.find((c) => c.name === "Groups" && c.children.size < 50);
+      let category = await props.guild.channels.cache.find(
+        (c) => c.name === props.categoryName && c.children.size < 50
+      );
 
       if (!category || category === undefined || category.children.size >= 50) {
         await props.guild.channels
-          .create("Groups", {
+          .create(props.categoryName, {
             type: "GUILD_CATEGORY",
           })
           .then((data) => (category = data));
@@ -46,7 +46,7 @@ module.exports = {
       let role = null;
       await props.guild.roles
         .create({
-          name: groupName,
+          name: teamName,
           color: props.roleColor,
         })
         .then((data) => {
@@ -54,7 +54,7 @@ module.exports = {
         });
 
       // Create the channel in the category
-      await category.createChannel(groupName, {
+      await category.createChannel(teamName, {
         permissionOverwrites: [denyEveryone, basicPerms(role)],
       });
 
