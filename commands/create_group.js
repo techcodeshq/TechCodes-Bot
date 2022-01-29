@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageActionRow, MessageButton } = require("discord.js");
+const { deleteBoth } = require("./delete_group");
 
 const basicPerms = (role, deny = false) => {
   const obj = {
@@ -17,21 +18,30 @@ module.exports = {
       option.setName("name").setDescription("The name of your new group!").setRequired(true)
     ),
   async execute(interaction, props) {
-    const groupName = interaction.options.getString("name");
+    const groupName = await interaction.options.getString("name");
     const denyEveryone = basicPerms(props.guild.roles.everyone, true);
+    const alreadyExists = await props.guild.roles.cache.find((r) => r.name === groupName);
 
-    // Make sure the category exists
-    let category = await props.guild.channels.cache.find((c) => c.name === "Groups");
-
-    if (category === undefined) {
-      await props.guild.channels
-        .create("Groups", {
-          type: "GUILD_CATEGORY",
-        })
-        .then((data) => (category = data));
+    //Make sure team doesnt already exist
+    if (alreadyExists) {
+      await interaction.reply(
+        "This team name is already in use! Please choose a different name or use `/join` to join it!"
+      );
+      return;
     }
 
     const success = async () => {
+      // Make sure the category exists
+      let category = await props.guild.channels.cache.find((c) => c.name === "Groups" && c.children.size < 50);
+
+      if (!category || category === undefined || category.children.size >= 50) {
+        await props.guild.channels
+          .create("Groups", {
+            type: "GUILD_CATEGORY",
+          })
+          .then((data) => (category = data));
+      }
+
       // Create the role
       let role = null;
       await props.guild.roles
@@ -53,7 +63,7 @@ module.exports = {
     };
 
     // Check if already in team
-    const otherTeams = interaction.member.roles.cache.filter((r) => r.color === parseInt(props.roleColor.slice(1), 16));
+    const otherTeams = interaction.member.roles.cache.filter((r) => r.color === props.roleColorDec);
 
     if (otherTeams.size > 0) {
       const row = new MessageActionRow().addComponents(
@@ -72,10 +82,16 @@ module.exports = {
             create: "Left old party and creating a new one!",
           };
           const newReply = replies[click.customId];
-          if (click.customId === "leave" || click.customId === "create") {
+          if (click.customId === "leave") {
             click.member.roles.remove(otherTeams.first());
           }
           if (click.customId === "create") {
+            // Check for number of people with role
+            if (otherTeams.first().members.size === 1) {
+              await deleteBoth(otherTeams.first(), props.guild);
+            } else {
+              await click.member.roles.remove(otherTeams.first());
+            }
             success();
           }
 
@@ -87,6 +103,6 @@ module.exports = {
 
     success();
 
-    await interaction.reply("Pong!");
+    await interaction.reply("Team successfully created!");
   },
 };

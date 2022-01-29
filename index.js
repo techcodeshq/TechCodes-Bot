@@ -1,5 +1,5 @@
 // Require the necessary discord.js classes
-const { Client, Intents, MessageEmbed, Collection } = require("discord.js");
+const { Client, Intents, Collection } = require("discord.js");
 const { token } = require("./config.json");
 
 // Create a new client instance
@@ -26,6 +26,7 @@ client.on("interactionCreate", async (interaction) => {
 
   const command = client.commands.get(interaction.commandName);
   const guild = interaction.member.guild;
+  const roleColor = "#6343ba";
 
   if (!command) return;
 
@@ -33,7 +34,8 @@ client.on("interactionCreate", async (interaction) => {
     await command.execute(interaction, {
       client: client,
       guild: guild,
-      roleColor: "#6343ba",
+      roleColor: roleColor,
+      roleColorDec: parseInt(roleColor.slice(1), 16),
     });
   } catch (error) {
     console.log("u suck");
