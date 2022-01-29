@@ -67,8 +67,7 @@ module.exports = {
 
     if (otherTeams.size > 0) {
       const row = new MessageActionRow().addComponents(
-        new MessageButton().setCustomId("cancel").setLabel("Cancel").setStyle("PRIMARY"),
-        new MessageButton().setCustomId("leave").setLabel("Leave Current").setStyle("DANGER"),
+        new MessageButton().setCustomId("cancel").setLabel("Cancel").setStyle("DANGER"),
         new MessageButton().setCustomId("create").setLabel("Leave and Create New").setStyle("SUCCESS")
       );
 
@@ -78,7 +77,6 @@ module.exports = {
         collector.on("collect", async (click) => {
           const replies = {
             cancel: "Cancelled!",
-            leave: "Left old party!",
             create: "Left old party and creating a new one!",
           };
           const newReply = replies[click.customId];

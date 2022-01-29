@@ -34,7 +34,6 @@ module.exports = {
     }
 
     await this.deleteBoth(targetRole, props.guild);
-
     await interaction.reply("Deleted!");
   },
 };

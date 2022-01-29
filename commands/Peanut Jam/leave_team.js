@@ -13,12 +13,11 @@ module.exports = {
       return;
     }
 
-    if (otherTeam.members.size === 1) {
-      await deleteBoth(otherTeam, props.guild);
-    } else {
-      await interaction.member.roles.remove(otherTeam);
-    }
+    await interaction.member.roles.remove(otherTeam);
 
+    if (otherTeam.members.size === 0) {
+      await deleteBoth(otherTeam, props.guild);
+    }
     await interaction.reply("Successfully left team!");
   },
 };
