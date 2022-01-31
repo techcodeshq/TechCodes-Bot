@@ -13,7 +13,7 @@ const basicPerms = (role, deny = false) => {
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("create_team")
-    .setDescription("Create a hackathon team!")
+    .setDescription("Create a team!")
     .addStringOption((option) => option.setName("name").setDescription("The name of your new team!").setRequired(true)),
   async execute(interaction, props) {
     const teamName = await interaction.options.getString("name");

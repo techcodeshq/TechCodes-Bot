@@ -5,7 +5,7 @@ const { deleteBoth } = require("./delete_team");
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("recruit")
-    .setDescription("Recruit a friend to your hackathon team!")
+    .setDescription("Recruit a friend to your team!")
     .addUserOption((option) =>
       option.setName("target").setDescription("The username of the person to recruit").setRequired(true)
     ),
@@ -16,7 +16,7 @@ module.exports = {
     // Confirm recruiter has a team
     const otherTeams = interaction.member.roles.cache.filter((r) => r.color === props.roleColorDec);
     if (otherTeams.size === 0) {
-      await interaction.reply("Please join or create a hackathon team first!");
+      await interaction.reply("Please join or create a team first!");
       return;
     }
 

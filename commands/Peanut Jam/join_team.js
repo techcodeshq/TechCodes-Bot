@@ -5,7 +5,7 @@ const { deleteBoth } = require("./delete_team");
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("join_team")
-    .setDescription("Join a hackathon team!")
+    .setDescription("Join a team!")
     .addRoleOption((option) => option.setName("team").setDescription("The role of the team to join").setRequired(true)),
   async execute(interaction, props) {
     const targetRole = await interaction.options.getRole("team");
@@ -16,7 +16,7 @@ module.exports = {
 
     // Confirm role is a team
     if (targetRole.color !== props.roleColorDec) {
-      await interaction.reply("Please join a hackathon team!");
+      await interaction.reply("Please join a valid team!");
       return;
     }
 

@@ -3,7 +3,7 @@ const { MessageActionRow, MessageButton } = require("discord.js");
 const { deleteBoth } = require("./delete_team");
 
 module.exports = {
-  data: new SlashCommandBuilder().setName("leave_team").setDescription("Leave your current hackathon team"),
+  data: new SlashCommandBuilder().setName("leave_team").setDescription("Leave your current team"),
   async execute(interaction, props) {
     const otherTeam = interaction.member.roles.cache.find((r) => r.color === props.roleColorDec);
 

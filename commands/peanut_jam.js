@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageActionRow, MessageButton } = require("discord.js");
 const commands = require("./Peanut Jam");
 
 const slashCommand = new SlashCommandBuilder()

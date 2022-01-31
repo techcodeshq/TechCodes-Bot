@@ -47,7 +47,7 @@ client.on("interactionCreate", async (interaction) => {
       roleColor: roleColor,
       roleColorDec: parseInt(roleColor.slice(1), 16),
       categoryName: "Teams",
-      maxMembers: 4,
+      maxMembers: 3,
     });
   } catch (error) {
     console.log("u suck");
@@ -62,4 +62,5 @@ client.on("interactionCreate", async (interaction) => {
 // Login to Discord with your client's token
 client.login(token);
 
-//https://discord.com/api/oauth2/authorize?client_id=936386452911169626&permissions=8&scope=bot
+// Join: https://discord.com/api/oauth2/authorize?client_id=936386452911169626&permissions=8&scope=bot
+// Peanut: https://cdn.discordapp.com/icons/760579209235267654/e6d187b90449b870d424044cbde570c7.webp?size=128
