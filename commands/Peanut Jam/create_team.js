@@ -22,9 +22,10 @@ module.exports = {
 
     //Make sure team doesnt already exist
     if (alreadyExists) {
-      await interaction.reply(
-        "This team name is already in use! Please choose a different name or use `/join` to join it!"
-      );
+      await interaction.reply({
+        content: "This team name is already in use! Please choose a different name or use `/join` to join it!",
+        ephemeral: true,
+      });
       return;
     }
 
@@ -101,6 +102,6 @@ module.exports = {
 
     success();
 
-    await interaction.reply("Team successfully created!");
+    await interaction.reply({ content: "Team successfully created!", ephemeral: true });
   },
 };

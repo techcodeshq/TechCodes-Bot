@@ -12,6 +12,7 @@ module.exports = {
         .addChoice("Points Counter", "points")
         .addChoice("Our Website", "website")
         .addChoice("Repost Form", "repost")
+        .addChoice("Peanut Jam Sign Up", "jam2022")
     ),
   async execute(interaction, props) {
     const choice = await interaction.options.getString("link_name");
@@ -19,6 +20,7 @@ module.exports = {
       points: "https://app.techcodes.org",
       website: "https://techcodes.org",
       repost: "https://bit.ly/techcodesrepost",
+      jam2022: "https://bit.ly/peanutjam2022",
     };
 
     await interaction.reply({ content: `Here you go!\n${replies[choice]}`, ephemeral: true });

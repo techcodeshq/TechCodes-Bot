@@ -16,13 +16,13 @@ module.exports = {
 
     // Confirm role is a team
     if (targetRole.color !== props.roleColorDec) {
-      await interaction.reply("Please join a valid team!");
+      await interaction.reply({ content: "Please join a valid team!", ephemeral: true });
       return;
     }
 
     // Confirm team has space
     if (targetRole.members.size >= props.maxMembers) {
-      await interaction.reply("Sorry, this team is full!");
+      await interaction.reply({ content: "Sorry, this team is full!", ephemeral: true });
       return;
     }
 
@@ -62,6 +62,6 @@ module.exports = {
 
     // Give the user the role
     success();
-    await interaction.reply("Team successfully joined!");
+    await interaction.reply({ content: "Team successfully joined!", ephemeral: true });
   },
 };

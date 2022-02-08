@@ -9,9 +9,8 @@ module.exports = {
     const teams = props.guild.roles.cache.filter((role) => role.color === props.roleColorDec);
     const fields = teams.map((team) => ({
       name: team.name,
-      value: `${team.members.size}/${props.maxMembers} | ${
-        team.members.size < props.maxMembers ? "Joinable!" : "All full!"
-      }`,
+      value: `${team.members.map((member) => `<@${member.user.id}>`).join(" ⋅ ")}
+      ${team.members.size}/${props.maxMembers} | ${team.members.size < props.maxMembers ? "Joinable!" : "All full!"}`,
     }));
 
     const embed = new MessageEmbed()
@@ -25,6 +24,6 @@ module.exports = {
       )
       .addFields(...fields);
 
-    await interaction.reply({ embeds: [embed], ephemeral: true });
+    await interaction.reply({ embeds: [embed], ephemeral: false });
   },
 };

@@ -9,7 +9,7 @@ module.exports = {
 
     //Make sure user is in a team
     if (!otherTeam) {
-      await interaction.reply("You have to be in a team to leave one!");
+      await interaction.reply({ content: "You have to be in a team to leave one!", ephemeral: true });
       return;
     }
 
@@ -18,6 +18,6 @@ module.exports = {
     if (otherTeam.members.size === 0) {
       await deleteBoth(otherTeam, props.guild);
     }
-    await interaction.reply("Successfully left team!");
+    await interaction.reply({ content: "Successfully left team!", ephemeral: true });
   },
 };

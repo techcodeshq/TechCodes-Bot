@@ -19,7 +19,7 @@ module.exports = {
     const choice = await interaction.options.getSubcommand();
 
     if (!(choice in commands)) {
-      await interaction.reply("Silly us a command");
+      await interaction.reply({ content: "Silly you have to use a command!", ephemeral: true });
       return;
     }
 

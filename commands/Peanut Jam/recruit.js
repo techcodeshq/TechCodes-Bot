@@ -16,31 +16,34 @@ module.exports = {
     // Confirm recruiter has a team
     const otherTeams = interaction.member.roles.cache.filter((r) => r.color === props.roleColorDec);
     if (otherTeams.size === 0) {
-      await interaction.reply("Please join or create a team first!");
+      await interaction.reply({ content: "Please join or create a team first!", ephemeral: true });
       return;
     }
 
     const recruitingTeam = otherTeams.first();
     // Confirm team has space
     if (recruitingTeam.members.size >= props.maxMembers) {
-      await interaction.reply("Sorry, your team is full!");
+      await interaction.reply({ content: "Sorry, your team is full!", ephemeral: true });
       return;
     }
 
     // Confirm recruitee doesnt have a team
     const otherTeamsTarget = targetUser.roles.cache.filter((r) => r.color === props.roleColorDec);
     if (otherTeamsTarget.size > 0) {
-      await interaction.reply("This user is already in a team!");
+      await interaction.reply({ content: "This user is already in a team!", ephemeral: true });
       return;
     }
 
     // Confirm recruitee isnt a bot
     if (targetUser.user.bot === true) {
-      await interaction.reply("You can't recruit a bot! (That wouldn't be fair would it)");
+      await interaction.reply({
+        content: "You can't recruit a bot! (That wouldn't be fair would it)",
+        ephemeral: true,
+      });
       return;
     }
 
     await targetUser.roles.add(recruitingTeam);
-    await interaction.reply("User has been recruited to your team!");
+    await interaction.reply({ content: "User has been recruited to your team!", ephemeral: true });
   },
 };

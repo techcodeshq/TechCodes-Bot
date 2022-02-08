@@ -24,16 +24,19 @@ module.exports = {
 
     // Confirm role is a team
     if (targetRole.color !== props.roleColorDec) {
-      await interaction.reply("Please delete a valid team!");
+      await interaction.reply({ content: "Please delete a valid team!", ephemeral: true });
       return;
     }
 
     // Confirm admin
     if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
-      await interaction.reply("You can't do that! Please talk to an executive to learn more!");
+      await interaction.reply({
+        content: "You can't do that! Please talk to an executive to learn more!",
+        ephemeral: true,
+      });
     }
 
     await this.deleteBoth(targetRole, props.guild);
-    await interaction.reply("Deleted!");
+    await interaction.reply({ content: "Deleted!", ephemeral: true });
   },
 };
