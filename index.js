@@ -1,6 +1,6 @@
 // Require the necessary discord.js classes
 const { Client, Intents, Collection } = require("discord.js");
-const { token } = require("./config.json");
+const { token, enabled } = require("./config.json");
 
 // Create a new client instance
 const client = new Client({
@@ -34,11 +34,19 @@ for (const file of commandFiles) {
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isCommand()) return;
 
-  const command = client.commands.get(interaction.commandName);
+  const commandName = interaction.commandName;
+  const command = client.commands.get(commandName);
   const guild = interaction.member.guild;
   const roleColor = "#6343ba";
 
   if (!command) return;
+  if (commandName in enabled && !enabled[commandName]) {
+    await interaction.reply({
+      content: "This command isn't available yet silly!",
+      ephemeral: true,
+    });
+    return;
+  }
 
   try {
     await command.execute(interaction, {
