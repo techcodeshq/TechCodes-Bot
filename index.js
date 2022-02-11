@@ -25,7 +25,9 @@ client.once("ready", () => {
 });
 
 // Get all commands and store them
-const commandFiles = fs.readdirSync("./commands/").filter((file) => file.endsWith(".js"));
+const commandFiles = fs
+  .readdirSync("./commands/")
+  .filter((file) => file.endsWith(".js"));
 
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);
@@ -41,7 +43,7 @@ client.on("interactionCreate", async (interaction) => {
   const roleColor = "#6343ba";
 
   if (!command) return;
-  if (!(commandName in process.env.ENABLED.split(','))) {
+  if (!(commandName in process.env.ENABLED?.split(","))) {
     await interaction.reply({
       content: "This command isn't available yet silly!",
       ephemeral: true,
