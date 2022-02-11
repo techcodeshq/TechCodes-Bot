@@ -21,7 +21,7 @@ rest
   .catch(console.error);
 
 // Register commands globally
-if (!process.env.TESTING) {
+if (process.env.TESTING != 0) {
   rest
     .put(Routes.applicationCommands(process.env.CLIENT_ID), { body: commands })
     .then(() => console.log("Successfully registered commands globally."))
