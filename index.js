@@ -41,7 +41,7 @@ client.on("interactionCreate", async (interaction) => {
   const roleColor = "#6343ba";
 
   if (!command) return;
-  if (!(commandName in process.env.ENABLED.split(','))) {
+  if (!process.env.ENABLED.includes(commandName)) {
     await interaction.reply({
       content: "This command isn't available yet silly!",
       ephemeral: true,
