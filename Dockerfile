@@ -1,4 +1,4 @@
-FROM node:16
+FROM nikolaik/python-nodejs:latest
 
 WORKDIR /usr/src/bot
 
