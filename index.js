@@ -1,6 +1,7 @@
 // Require the necessary discord.js classes
 const { Client, Intents, Collection } = require("discord.js");
-const { token, enabled } = require("./config.json");
+
+require("dotenv").config();
 
 // Create a new client instance
 const client = new Client({
@@ -40,7 +41,7 @@ client.on("interactionCreate", async (interaction) => {
   const roleColor = "#6343ba";
 
   if (!command) return;
-  if (commandName in enabled && !enabled[commandName]) {
+  if (!(commandName in process.env.ENABLED.split(','))) {
     await interaction.reply({
       content: "This command isn't available yet silly!",
       ephemeral: true,
@@ -68,7 +69,7 @@ client.on("interactionCreate", async (interaction) => {
 });
 
 // Login to Discord with your client's token
-client.login(token);
+client.login(process.env.TOKEN);
 
 // Join: https://discord.com/api/oauth2/authorize?client_id=936386452911169626&permissions=8&scope=bot
 // Peanut: https://cdn.discordapp.com/icons/760579209235267654/e6d187b90449b870d424044cbde570c7.webp?size=128
