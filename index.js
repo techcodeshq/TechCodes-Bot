@@ -25,9 +25,7 @@ client.once("ready", () => {
 });
 
 // Get all commands and store them
-const commandFiles = fs
-  .readdirSync("./commands/")
-  .filter((file) => file.endsWith(".js"));
+const commandFiles = fs.readdirSync("./commands/").filter((file) => file.endsWith(".js"));
 
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);
@@ -40,9 +38,9 @@ client.on("interactionCreate", async (interaction) => {
   const commandName = interaction.commandName;
   const command = client.commands.get(commandName);
   const guild = interaction.member.guild;
-  const roleColor = "#6343ba";
 
   if (!command) return;
+
   if (!process.env.ENABLED.includes(commandName)) {
     await interaction.reply({
       content: "This command isn't available yet silly!",
@@ -55,10 +53,7 @@ client.on("interactionCreate", async (interaction) => {
     await command.execute(interaction, {
       client: client,
       guild: guild,
-      roleColor: roleColor,
-      roleColorDec: parseInt(roleColor.slice(1), 16),
-      categoryName: "Teams",
-      maxMembers: 4,
+      execId: process.env.EXEC_ID,
     });
   } catch (error) {
     console.log("u suck");

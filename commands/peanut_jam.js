@@ -17,12 +17,19 @@ module.exports = {
   data: slashCommand,
   async execute(interaction, props) {
     const choice = await interaction.options.getSubcommand();
+    const roleColor = "#6343ba";
 
     if (!(choice in commands)) {
       await interaction.reply({ content: "Silly you have to use a command!", ephemeral: true });
       return;
     }
 
-    commands[choice].execute(interaction, props);
+    commands[choice].execute(interaction, {
+      ...props,
+      roleColor: roleColor,
+      roleColorDec: parseInt(roleColor.slice(1), 16),
+      categoryName: "Teams",
+      maxMembers: 4,
+    });
   },
 };

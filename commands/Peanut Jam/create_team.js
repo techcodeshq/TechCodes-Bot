@@ -13,7 +13,7 @@ const basicPerms = (role, deny = false) => {
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("create_team")
-    .setDescription("Create a team!")
+    .setDescription("TEST TEST TEST Create a team!")
     .addStringOption((option) => option.setName("name").setDescription("The name of your new team!").setRequired(true)),
   async execute(interaction, props) {
     const teamName = await interaction.options.getString("name");
@@ -29,7 +29,7 @@ module.exports = {
       return;
     }
 
-    const success = async () => {
+    const success = async (interaction) => {
       // Make sure the category exists
       let category = await props.guild.channels.cache.find(
         (c) => c.name === props.categoryName && c.children.size < 50
@@ -54,9 +54,13 @@ module.exports = {
           role = data;
         });
 
+      const execRole = await props.guild.roles.cache.find((r) => r.id === props.execId);
+
+      console.log(execRole);
+
       // Create the channel in the category
       await category.createChannel(teamName, {
-        permissionOverwrites: [denyEveryone, basicPerms(role)],
+        permissionOverwrites: [denyEveryone, basicPerms(role), execRole && basicPerms(execRole)],
       });
 
       // Give the user the role
@@ -72,36 +76,39 @@ module.exports = {
         new MessageButton().setCustomId("create").setLabel("Leave and Create New").setStyle("SUCCESS")
       );
 
-      await interaction.reply({ content: "You already have a team!", components: [row], ephemeral: true }).then(() => {
-        const collector = interaction.channel.createMessageComponentCollector({ componentType: "BUTTON", time: 15000 });
-
-        collector.on("collect", async (click) => {
-          const replies = {
-            cancel: "Cancelled!",
-            create: "Left old party and creating a new one!",
-          };
-          const newReply = replies[click.customId];
-          if (click.customId === "leave") {
-            click.member.roles.remove(otherTeams.first());
-          }
-          if (click.customId === "create") {
-            // Check for number of people with role
-            if (otherTeams.first().members.size === 1) {
-              await deleteBoth(otherTeams.first(), props.guild);
-            } else {
-              await click.member.roles.remove(otherTeams.first());
-            }
-            success();
-          }
-
-          await click.update({ content: newReply, components: [] });
-        });
+      await interaction.reply({ content: "You already have a team!", components: [row], ephemeral: true });
+      const collector = await interaction.channel.createMessageComponentCollector({
+        componentType: "BUTTON",
+        time: 15000,
       });
+
+      collector.on("collect", async (click) => {
+        const replies = {
+          cancel: "Cancelled!",
+          create: "Left old party and creating a new one!",
+        };
+        const newReply = replies[click.customId];
+        if (click.customId === "leave") {
+          click.member.roles.remove(otherTeams.first());
+        }
+        if (click.customId === "create") {
+          // Check for number of people with role
+          if (otherTeams.first().members.size === 1) {
+            await deleteBoth(otherTeams.first(), props.guild);
+          } else {
+            await click.member.roles.remove(otherTeams.first());
+          }
+          success(click);
+        }
+
+        await click.update({ content: newReply, components: [] });
+      });
+
+      return;
+    } else {
+      success(interaction);
+      await interaction.reply({ content: "Team successfully created!", ephemeral: true });
       return;
     }
-
-    success();
-
-    await interaction.reply({ content: "Team successfully created!", ephemeral: true });
   },
 };
